@@ -19,7 +19,7 @@ from pycalendar import xmldefinitions, xmlutils
 from pycalendar.datetimevalue import DateTimeValue
 from pycalendar.periodvalue import PeriodValue
 from pycalendar.value import Value
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 from pycalendar.exceptions import InvalidComponent, ErrorBase
 
 
@@ -65,6 +65,9 @@ class ComponentBase(object):
 
     def __str__(self):
         return self.getText()
+
+    # Python 2 kept identity hashing alongside __eq__; components are used in sets
+    __hash__ = object.__hash__
 
     def __ne__(self, other):
         return not self.__eq__(other)

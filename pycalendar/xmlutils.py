@@ -14,7 +14,7 @@
 #    limitations under the License.
 ##
 
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 
 
 def makeTag(namespace, name):
@@ -32,16 +32,16 @@ def toString(root):
 
         if node.text is not None and node.text.strip():
             return
-        elif len(node.getchildren()):
+        elif len(node[:]):
             indent = "\n" + " " * (level + 1) * INDENT
             node.text = indent
-            for child in node.getchildren():
+            for child in node[:]:
                 child.tail = indent
                 _indentNode(child, level + 1)
-            if len(node.getchildren()):
-                node.getchildren()[-1].tail = "\n" + " " * level * INDENT
+            if len(node[:]):
+                node[:][-1].tail = "\n" + " " * level * INDENT
 
     _indentNode(root, 0)
-    data += XML.tostring(root) + "\n"
+    data += XML.tostring(root, encoding="unicode") + "\n"
 
     return data

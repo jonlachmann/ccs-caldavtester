@@ -74,7 +74,7 @@ class Duration(ValueMixin):
         # Is it an exact number of weeks - if so use the weeks value, otherwise
         # days, hours, minutes, seconds
         if remainder % (7 * 24 * 60 * 60) == 0:
-            self.mWeeks = remainder / (7 * 24 * 60 * 60)
+            self.mWeeks = remainder // (7 * 24 * 60 * 60)
             self.mDays = 0
 
             self.mHours = 0
@@ -83,16 +83,16 @@ class Duration(ValueMixin):
         else:
             self.mSeconds = remainder % 60
             remainder -= self.mSeconds
-            remainder /= 60
+            remainder //= 60
 
             self.mMinutes = remainder % 60
             remainder -= self.mMinutes
-            remainder /= 60
+            remainder //= 60
 
             self.mHours = remainder % 24
             remainder -= self.mHours
 
-            self.mDays = remainder / 24
+            self.mDays = remainder // 24
 
             self.mWeeks = 0
 
@@ -121,7 +121,7 @@ class Duration(ValueMixin):
         return dur
 
     def parse(self, data):
-        # parse format ([+]/-) "P" (dur-date / dur-time / dur-week)
+        # parse format ([+]/-) "P" (dur-date // dur-time // dur-week)
 
         try:
             offset = 0

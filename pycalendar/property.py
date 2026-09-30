@@ -31,7 +31,7 @@ from pycalendar.utcoffsetvalue import UTCOffsetValue
 from pycalendar.utils import decodeParameterValue
 from pycalendar.value import Value
 import io as StringIO
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 
 
 class PropertyBase(object):
@@ -359,9 +359,10 @@ class PropertyBase(object):
         temp = sout.getvalue()
         sout.close()
 
-        # Look for line length exceed
+        # Look for line length exceed (RFC5545 folds at 75 octets, not characters)
+        temp = temp.encode("utf-8")
         if len(temp) < 75:
-            os.write(temp)
+            os.write(temp.decode("utf-8"))
         else:
             # Look for valid utf8 range and write that out
             start = 0
@@ -372,16 +373,16 @@ class PropertyBase(object):
                 offset = start + lineWrap
                 if offset >= len(temp):
                     line = temp[start:]
-                    os.write(line)
+                    os.write(line.decode("utf-8"))
                     written = len(temp)
                 else:
                     # Check whether next char is valid utf8 lead byte
-                    while (temp[offset] > 0x7F) and ((ord(temp[offset]) & 0xC0) == 0x80):
+                    while (temp[offset] & 0xC0) == 0x80:
                         # Step back until we have a valid char
                         offset -= 1
 
                     line = temp[start:offset]
-                    os.write(line)
+                    os.write(line.decode("utf-8"))
                     os.write("\r\n ")
                     lineWrap = 73   # We are now adding a space at the start
                     written += offset - start
@@ -433,21 +434,21 @@ class PropertyBase(object):
             prop = cls()
 
             # Get the name
-            prop.mName = jobject[0].encode("utf-8").upper()
+            prop.mName = jobject[0].upper()
 
             # Get the parameters
             if jobject[1]:
                 for name, value in list(jobject[1].items()):
                     # Now add parameter value
                     name = name.upper()
-                    attrvalue = Parameter(name=name.encode("utf-8"), value=value.encode("utf-8"))
+                    attrvalue = Parameter(name=name, value=value)
                     prop.mParameters.setdefault(name, []).append(attrvalue)
 
             # Get default value type from property name and insert a VALUE parameter if current value type is not default
             value_type = cls.sValueTypeMap.get(jobject[2].upper(), Value.VALUETYPE_UNKNOWN)
             default_type = cls.sDefaultValueTypeMap.get(prop.mName.upper(), Value.VALUETYPE_UNKNOWN)
             if default_type != value_type:
-                attrvalue = Parameter(name=cls.sValue, value=jobject[2].encode("utf-8").upper())
+                attrvalue = Parameter(name=cls.sValue, value=jobject[2].upper())
                 prop.mParameters.setdefault(cls.sValue, []).append(attrvalue)
 
             # Get value type from property name

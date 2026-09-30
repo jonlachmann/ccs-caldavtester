@@ -32,7 +32,7 @@ from src.request import request
 from src.request import stats
 from src.testsuite import testsuite
 from src.xmlUtils import nodeForPath, xmlPathSplit
-from xml.etree.cElementTree import ElementTree, tostring
+from xml.etree.ElementTree import ElementTree, tostring
 import subprocess
 import http.client
 import json
@@ -268,7 +268,7 @@ class caldavtest(object):
         if len(resource[2]):
             req.pswd = resource[2]
         _ignore_result, _ignore_resulttxt, response, respdata = self.dorequest(req, False, False, label=label)
-        if response.status / 100 != 2:
+        if response.status // 100 != 2:
             return False, None
 
         return True, respdata
@@ -329,7 +329,7 @@ class caldavtest(object):
             if len(deleter[2]):
                 req.pswd = deleter[2]
             _ignore_result, _ignore_resulttxt, response, _ignore_respdata = self.dorequest(req, False, False, label=label)
-            if response.status / 100 != 2:
+            if response.status // 100 != 2:
                 return False
 
         return True
@@ -550,7 +550,7 @@ class caldavtest(object):
                 req.pswd = pswd
             result, _ignore_resulttxt, response, _ignore_respdata = self.dorequest(req, False, False, label="%s | %s" % (label, "WAITCHANGED"))
             if result and (response is not None):
-                if response.status / 100 == 2:
+                if response.status // 100 == 2:
                     hdrs = response.msg.getheaders("Etag")
                     if hdrs:
                         newetag = hdrs[0].encode("utf-8")
@@ -749,7 +749,7 @@ class caldavtest(object):
             result, txt = self.verifyrequest(req, uri, response, respdata)
             resulttxt += txt
         elif forceverify:
-            result = (response.status / 100 == 2)
+            result = (response.status // 100 == 2)
             if not result:
                 resulttxt += "Status Code Error: %d" % response.status
 
@@ -901,7 +901,7 @@ class caldavtest(object):
     def parseXML(self, node):
         self.ignore_all = node.get(src.xmlDefs.ATTR_IGNORE_ALL, src.xmlDefs.ATTR_VALUE_NO) == src.xmlDefs.ATTR_VALUE_YES
 
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_DESCRIPTION:
                 self.description = child.text
             elif child.tag == src.xmlDefs.ELEMENT_REQUIRE_FEATURE:
@@ -918,7 +918,7 @@ class caldavtest(object):
                 self.end_requests = request.parseList(self.manager, child)
 
     def parseFeatures(self, node, require=True):
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_FEATURE:
                 (self.require_features if require else self.exclude_features).add(child.text.encode("utf-8"))
 
@@ -951,13 +951,13 @@ class caldavtest(object):
                 if len(prop) != 1:
                     return False, "           Wrong number of DAV:prop elements\n"
 
-                for child in prop[0].getchildren():
+                for child in prop[0][:]:
                     fqname = child.tag
                     if len(child):
                         # Copy sub-element data as text into one long string and strip leading/trailing space
                         value = ""
-                        for p in child.getchildren():
-                            temp = tostring(p)
+                        for p in child[:]:
+                            temp = tostring(p, encoding="unicode")
                             temp = temp.strip()
                             value += temp
                     else:

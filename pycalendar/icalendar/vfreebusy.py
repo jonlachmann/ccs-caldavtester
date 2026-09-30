@@ -300,7 +300,7 @@ class VFreeBusy(Component):
         else:
 
             # Sort the list by period
-            self.mBusyTime.sort(cmp=lambda x, y: x.getPeriod().getStart().compareDateTime(y.getPeriod().getStart()))
+            self.mBusyTime.sort(key=lambda x: x.getPeriod().getStart())
 
             # Determine range
             start = DateTime()

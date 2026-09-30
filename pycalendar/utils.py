@@ -403,11 +403,11 @@ def leapDaysSince1970(year_offset):
         return cachedLeapDaysSince1970[year_offset]
     except KeyError:
         if year_offset > 2:
-            result = (year_offset + 1) / 4
+            result = (year_offset + 1) // 4
         elif year_offset < -1:
             # Python will round down negative numbers (i.e. -5/4 = -2, but we want -1), so
             # what is (year_offset - 2) in C code is actually (year_offset - 2 + 3) in Python.
-            result = (year_offset + 1) / 4
+            result = (year_offset + 1) // 4
         else:
             result = 0
         cachedLeapDaysSince1970[year_offset] = result

@@ -19,7 +19,7 @@ Verifier that checks a propfind response to make sure that the specified ACL pri
 are available for the currently authenticated user.
 """
 
-from xml.etree.cElementTree import ElementTree
+from xml.etree.ElementTree import ElementTree
 from io import StringIO
 import urllib.request, urllib.parse, urllib.error
 
@@ -55,12 +55,12 @@ class Verifier(object):
 
             # Get all privileges
             granted_privs = []
-            privset = response.getiterator("{DAV:}current-user-privilege-set")
+            privset = response.iter("{DAV:}current-user-privilege-set")
             for props in privset:
                 # Determine status for this propstat
                 privileges = props.findall("{DAV:}privilege")
                 for privilege in privileges:
-                    for child in privilege.getchildren():
+                    for child in privilege[:]:
                         granted_privs.append(child.tag)
 
             granted_result_set = set(granted_privs)

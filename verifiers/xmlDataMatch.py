@@ -19,7 +19,7 @@ Verifier that checks the response body for an exact match to data in a file.
 """
 
 from difflib import unified_diff
-from xml.etree.cElementTree import ElementTree, tostring
+from xml.etree.ElementTree import ElementTree, tostring
 import io
 import os
 
@@ -70,9 +70,9 @@ class Verifier(object):
 
             # Apply filters
             for filter in filters:
-                for node in tree.getiterator(filter):
+                for node in tree.iter(filter):
                     node.clear()
-            return tostring(tree.getroot())
+            return tostring(tree.getroot(), encoding="unicode")
 
         try:
             respdata = normalizeXMLData(respdata)

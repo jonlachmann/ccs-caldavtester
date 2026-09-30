@@ -18,7 +18,7 @@ from pycalendar import xmldefinitions, xmlutils
 from pycalendar.datetime import DateTime
 from pycalendar.duration import Duration
 from pycalendar.valueutils import ValueMixin
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 
 
 class Period(ValueMixin):

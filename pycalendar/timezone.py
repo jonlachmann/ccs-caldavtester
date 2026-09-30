@@ -109,8 +109,8 @@ class Timezone(object):
             return TimezoneDatabase.getTimezoneDescriptor(Timezone.sDefaultTimezone.getTimezoneID(), dt)
         elif isinstance(self.mTimezone, int):
             sign = "-" if self.mTimezone < 0 else "+"
-            hours = abs(self.mTimezone) / 3600
-            minutes = divmod(abs(self.mTimezone) / 60, 60)[1]
+            hours = abs(self.mTimezone) // 3600
+            minutes = divmod(abs(self.mTimezone) // 60, 60)[1]
             return "%s%02d%02d" % (sign, hours, minutes,)
         else:
             # Look up timezone and resolve date using default timezones

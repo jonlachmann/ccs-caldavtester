@@ -380,7 +380,7 @@ class request(object):
             self.port = self.manager.server_info.port2
             self.afunix = self.manager.server_info.afunix2
 
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_REQUIRE_FEATURE:
                 self.parseFeatures(child, require=True)
             elif child.tag == src.xmlDefs.ELEMENT_EXCLUDE_FEATURE:
@@ -418,7 +418,7 @@ class request(object):
                 self.parseGrab(child, self.grabcalparam)
 
     def parseFeatures(self, node, require=True):
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_FEATURE:
                 (self.require_features if require else self.exclude_features).add(child.text.encode("utf-8"))
 
@@ -426,7 +426,7 @@ class request(object):
 
         name = None
         value = None
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_NAME:
                 name = child.text.encode("utf-8")
             elif child.tag == src.xmlDefs.ELEMENT_VALUE:
@@ -437,7 +437,7 @@ class request(object):
 
     def parseList(manager, node):
         requests = []
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_REQUEST:
                 req = request(manager)
                 req.parseXML(child)
@@ -452,7 +452,7 @@ class request(object):
 
         name = None
         variable = None
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag in (src.xmlDefs.ELEMENT_NAME, src.xmlDefs.ELEMENT_PROPERTY):
                 name = self.manager.server_info.subs(child.text.encode("utf-8"))
             elif child.tag == src.xmlDefs.ELEMENT_VARIABLE:
@@ -466,7 +466,7 @@ class request(object):
         name = None
         parent = None
         variable = None
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag in (src.xmlDefs.ELEMENT_NAME, src.xmlDefs.ELEMENT_PROPERTY, src.xmlDefs.ELEMENT_POINTER):
                 name = self.manager.server_info.subs(child.text.encode("utf-8"))
             elif child.tag == src.xmlDefs.ELEMENT_PARENT:
@@ -500,7 +500,7 @@ class data(object):
         self.substitute = node.get(src.xmlDefs.ATTR_SUBSTITUTIONS, src.xmlDefs.ATTR_VALUE_YES) == src.xmlDefs.ATTR_VALUE_YES
         self.generate = node.get(src.xmlDefs.ATTR_GENERATE, src.xmlDefs.ATTR_VALUE_NO) == src.xmlDefs.ATTR_VALUE_YES
 
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_CONTENTTYPE:
                 self.content_type = child.text.encode("utf-8")
             elif child.tag == src.xmlDefs.ELEMENT_FILEPATH:
@@ -514,7 +514,7 @@ class data(object):
     def parseSubstituteXML(self, node):
         name = None
         value = None
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_NAME:
                 name = child.text.encode("utf-8")
             elif child.tag == src.xmlDefs.ELEMENT_VALUE:
@@ -558,7 +558,7 @@ class generator(object):
 
     def parseXML(self, node):
 
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_CALLBACK:
                 self.callback = child.text.encode("utf-8")
             elif child.tag == src.xmlDefs.ELEMENT_ARG:
@@ -567,7 +567,7 @@ class generator(object):
     def parseArgXML(self, node):
         name = None
         values = []
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_NAME:
                 name = child.text.encode("utf-8")
             elif child.tag == src.xmlDefs.ELEMENT_VALUE:
@@ -625,7 +625,7 @@ class verify(object):
 
     def parseXML(self, node):
 
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_REQUIRE_FEATURE:
                 self.parseFeatures(child, require=True)
             elif child.tag == src.xmlDefs.ELEMENT_EXCLUDE_FEATURE:
@@ -636,14 +636,14 @@ class verify(object):
                 self.parseArgXML(child)
 
     def parseFeatures(self, node, require=True):
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_FEATURE:
                 (self.require_features if require else self.exclude_features).add(child.text.encode("utf-8"))
 
     def parseArgXML(self, node):
         name = None
         values = []
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_NAME:
                 name = child.text.encode("utf-8")
             elif child.tag == src.xmlDefs.ELEMENT_VALUE:

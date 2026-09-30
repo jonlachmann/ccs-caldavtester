@@ -15,6 +15,7 @@
 ##
 
 from io import StringIO
+from functools import cmp_to_key
 from pycalendar import xmlutils
 from pycalendar.containerbase import ContainerBase
 from pycalendar.datetime import DateTime
@@ -31,7 +32,7 @@ from pycalendar.period import Period
 from pycalendar.utils import readFoldedLine
 import collections
 import json
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 
 
 class Calendar(ContainerBase):
@@ -451,9 +452,9 @@ class Calendar(ContainerBase):
             vevent.expandPeriod(period, list)
 
         if (all_day_at_top):
-            list.sort(ComponentExpanded.sort_by_dtstart_allday)
+            list.sort(key=cmp_to_key(ComponentExpanded.sort_by_dtstart_allday))
         else:
-            list.sort(ComponentExpanded.sort_by_dtstart)
+            list.sort(key=cmp_to_key(ComponentExpanded.sort_by_dtstart))
 
     def getVToDos(self, only_due, all_dates, upto_due_date, list):
         # Get current date-time less one day to test for completed events during the last day

@@ -24,7 +24,7 @@ try:
     from pycalendar.exceptions import InvalidData
 except ImportError:
     pass
-from xml.etree.cElementTree import ElementTree
+from xml.etree.ElementTree import ElementTree
 from xml.parsers.expat import ExpatError
 import io
 

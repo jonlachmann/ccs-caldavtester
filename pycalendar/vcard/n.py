@@ -99,7 +99,7 @@ class N(ValueMixin):
         utils.generateDoubleNestedList(os, self.mValue)
 
     def parseJSON(self, jobject):
-        self.mValue = tuple([x.encode("utf-8") for x in jobject])
+        self.mValue = tuple(jobject)
 
     def writeJSON(self, jobject):
         jobject.append(list(self.mValue))

@@ -22,7 +22,7 @@ The parameter can consist of one or more values, all string.
 
 from pycalendar import xmldefinitions, xmlutils
 from pycalendar.utils import encodeParameterValue
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 
 
 class Parameter(object):

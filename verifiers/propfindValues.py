@@ -18,7 +18,7 @@
 Verifier that checks a propfind response for regex matches to property values.
 """
 
-from xml.etree.cElementTree import ElementTree, tostring
+from xml.etree.ElementTree import ElementTree, tostring
 from io import StringIO
 import re
 import urllib.request, urllib.parse, urllib.error
@@ -39,7 +39,7 @@ class Verifier(object):
                     tree = ElementTree(file=StringIO(value))
                 except Exception:
                     return False, "           Could not parse XML value: %s\n" % (value,)
-                value = tostring(tree.getroot())
+                value = tostring(tree.getroot(), encoding="unicode")
             return value
 
         # Get property arguments and split on $ delimited for name, value tuples
@@ -106,18 +106,18 @@ class Verifier(object):
 
                 def _removeWhitespace(node):
 
-                    for child in node.getchildren():
+                    for child in node[:]:
                         child.text = child.text.strip() if child.text else child.text
                         child.tail = child.tail.strip() if child.tail else child.tail
                         _removeWhitespace(child)
 
-                for child in prop[0].getchildren():
+                for child in prop[0][:]:
                     fqname = child.tag
                     if len(child):
                         value = ""
                         _removeWhitespace(child)
-                        for p in child.getchildren():
-                            value += tostring(p)
+                        for p in child[:]:
+                            value += tostring(p, encoding="unicode")
                     elif child.text:
                         value = child.text
                     else:

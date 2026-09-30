@@ -21,7 +21,7 @@ from pycalendar.icalendar import xmldefinitions
 from pycalendar.parser import ParserContext
 from pycalendar.value import Value
 from pycalendar import xmldefinitions as xmldefinitions_top
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 
 
 class RequestStatusValue(Value):
@@ -91,7 +91,7 @@ class RequestStatusValue(Value):
             data.text = self.mValue[2]
 
     def parseJSONValue(self, jobject):
-        self.mValue = [x.encode("utf-8") for x in jobject]
+        self.mValue = list(jobject)
 
     def writeJSONValue(self, jobject):
         value = [self.mValue[0], self.mValue[1]]

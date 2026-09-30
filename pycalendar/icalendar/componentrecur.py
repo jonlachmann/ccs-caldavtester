@@ -14,6 +14,7 @@
 #    limitations under the License.
 ##
 
+from functools import cmp_to_key
 from pycalendar.datetime import DateTime
 from pycalendar.icalendar import definitions
 from pycalendar.icalendar.component import Component
@@ -428,8 +429,8 @@ class ComponentRecur(Component):
                             results.append(self.createExpanded(self, iter))
                     else:
                         # Sort each list first
-                        prior.sort(self.sort_by_dtstart)
-                        future.sort(self.sort_by_dtstart)
+                        prior.sort(key=cmp_to_key(self.sort_by_dtstart))
+                        future.sort(key=cmp_to_key(self.sort_by_dtstart))
 
                         # Add each expanded item
                         for iter1 in items:

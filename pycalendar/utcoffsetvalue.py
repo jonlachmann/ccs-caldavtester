@@ -75,8 +75,8 @@ class UTCOffsetValue(Value):
                 sign = "+"
 
             secs = abs_value % 60
-            mins = (abs_value / 60) % 60
-            hours = abs_value / (60 * 60)
+            mins = (abs_value // 60) % 60
+            hours = abs_value // (60 * 60)
 
             s = ("%s%02d:%02d" if fullISO else "%s%02d%02d") % (sign, hours, mins,)
             if (secs != 0):

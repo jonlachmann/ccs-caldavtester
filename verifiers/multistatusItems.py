@@ -20,7 +20,7 @@ are returned with appropriate status codes.
 """
 
 from src.utils import processHrefSubstitutions
-from xml.etree.cElementTree import ElementTree
+from xml.etree.ElementTree import ElementTree
 from io import StringIO
 import urllib.request, urllib.parse, urllib.error
 

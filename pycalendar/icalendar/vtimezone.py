@@ -120,7 +120,7 @@ class VTimezone(Component):
                     utc_offset2 = self.mComponents[1].getUTCOffset()
 
                 # Create key
-                self.mUTCOffsetSortKey = (utc_offset1 + utc_offset2) / 2
+                self.mUTCOffsetSortKey = (utc_offset1 + utc_offset2) // 2
             else:
                 self.mUTCOffsetSortKey = 0
 
@@ -190,11 +190,11 @@ class VTimezone(Component):
                     tzoffset = -tzoffset
                     negative = True
                 result = ("+", "-")[negative]
-                hours_offset = tzoffset / (60 * 60)
+                hours_offset = tzoffset // (60 * 60)
                 if hours_offset < 10:
                     result += "0"
                 result += str(hours_offset)
-                mins_offset = (tzoffset / 60) % 60
+                mins_offset = (tzoffset // 60) % 60
                 if mins_offset < 10:
                     result += "0"
                 result += str(mins_offset)

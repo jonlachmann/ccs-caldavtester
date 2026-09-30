@@ -21,7 +21,7 @@ from pycalendar.icalendar.exceptions import TooManyInstancesError
 from pycalendar.period import Period
 from pycalendar.valueutils import ValueMixin
 import io as StringIO
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 
 
 def WeekDayNumCompare_compare(w1, w2):

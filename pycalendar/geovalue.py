@@ -21,7 +21,7 @@ from pycalendar.exceptions import InvalidData
 from pycalendar.icalendar import xmldefinitions
 from pycalendar.value import Value
 from pycalendar import xmldefinitions as xmldefinitions_top
-import xml.etree.cElementTree as XML
+import xml.etree.ElementTree as XML
 
 
 class GeoValue(Value):

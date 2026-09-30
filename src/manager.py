@@ -19,7 +19,7 @@ Class to manage the testing process.
 """
 
 from src.serverinfo import serverinfo
-from xml.etree.cElementTree import ElementTree
+from xml.etree.ElementTree import ElementTree
 from xml.parsers.expat import ExpatError
 import getopt
 import os

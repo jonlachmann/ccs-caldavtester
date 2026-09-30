@@ -160,7 +160,7 @@ class serverinfo(object):
         return set([(v, k) for k, v in list(uidsubs.items())])
 
     def parseXML(self, node):
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_HOST:
                 try:
                     self.host = child.text.encode("utf-8")
@@ -205,7 +205,7 @@ class serverinfo(object):
         self.updateParams()
 
     def parseFeatures(self, node):
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_FEATURE:
                 self.features.add(child.text.encode("utf-8"))
 
@@ -231,11 +231,11 @@ class serverinfo(object):
         # Look for count
         count = node.get(src.xmlDefs.ATTR_COUNT)
 
-        for child in node.getchildren():
+        for child in node[:]:
             self.parseSubstitutionXML(child, count)
 
     def parseSubstitutionsXML(self, node):
-        for child in node.getchildren():
+        for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_SUBSTITUTION:
                 self.parseSubstitutionXML(child)
             elif child.tag == src.xmlDefs.ELEMENT_REPEAT:
@@ -245,7 +245,7 @@ class serverinfo(object):
         if node.tag == src.xmlDefs.ELEMENT_SUBSTITUTION:
             key = None
             value = None
-            for schild in node.getchildren():
+            for schild in node[:]:
                 if schild.tag == src.xmlDefs.ELEMENT_KEY:
                     key = schild.text.encode("utf-8")
                 elif schild.tag == src.xmlDefs.ELEMENT_VALUE:
