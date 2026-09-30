@@ -94,7 +94,7 @@ class Verifier(object):
         # Handle absolute root element
         if actual_path[0] == '/':
             actual_path = actual_path[1:]
-        r = re.search("(\{[^\}]+\}[^/]+)(.*)", actual_path)
+        r = re.search("(\\{[^\\}]+\\}[^/]+)(.*)", actual_path)
         if r.group(2):
             root_path = r.group(1)
             child_path = r.group(2)[1:]
@@ -210,7 +210,7 @@ class Verifier(object):
             actual_xpath = "./" + actual_xpath[3:]
 
         # Handle absolute root element and find all matching nodes
-        r = re.search("(/?\{[^\}]+\}[^/]+|\.)(.*)", actual_xpath)
+        r = re.search("(/?\\{[^\\}]+\\}[^/]+|\\.)(.*)", actual_xpath)
         if r.group(2):
             root_path = r.group(1)
             child_path = r.group(2)[1:]

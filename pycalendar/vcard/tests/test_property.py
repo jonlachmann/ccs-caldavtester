@@ -33,7 +33,7 @@ class TestProperty(unittest.TestCase):
         "NOTE:Some \\ntext",
         "note:Some \\ntext",
         "item1.ADR;type=WORK;type=pref:;;1245 Test;Sesame Street;CA;11111;USA",
-        "X-Test:Some\, text.",
+        "X-Test:Some\\, text.",
         "X-Test;VALUE=URI:geio:123.123,123.123",
         "X-ABUID:5B77BC10-E9DB-48C4-8BE1-BAB5E38E1E43\\:ABPerson",
         "X-ABUID:5B77BC10-E9DB-48C4-8BE1-BAB5E38E1E43:ABPerson",

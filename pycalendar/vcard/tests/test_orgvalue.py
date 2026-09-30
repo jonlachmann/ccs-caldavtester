@@ -26,8 +26,8 @@ class TestNValue(unittest.TestCase):
         items = (
             ("", ""),
             ("Example", "Example"),
-            ("Example\, Inc.", "Example\, Inc."),
-            ("Example\; Inc;Dept. of Silly Walks", "Example\; Inc;Dept. of Silly Walks"),
+            ("Example\\, Inc.", "Example\\, Inc."),
+            ("Example\\; Inc;Dept. of Silly Walks", "Example\\; Inc;Dept. of Silly Walks"),
         )
 
         for item, result in items:
@@ -41,8 +41,8 @@ class TestNValue(unittest.TestCase):
         items = (
             ("ORG:", "ORG:"),
             ("ORG:Example", "ORG:Example"),
-            ("ORG:Example\, Inc.", "ORG:Example\, Inc."),
-            ("ORG:Example\; Inc;Dept. of Silly Walks", "ORG:Example\; Inc;Dept. of Silly Walks"),
+            ("ORG:Example\\, Inc.", "ORG:Example\\, Inc."),
+            ("ORG:Example\\; Inc;Dept. of Silly Walks", "ORG:Example\\; Inc;Dept. of Silly Walks"),
             ("ORG;VALUE=TEXT:Example", "ORG:Example"),
         )
 

@@ -45,7 +45,7 @@ class Verifier(object):
             return False, "        No file to compare response to"
 
         # read in all data from specified file
-        fd = open(files[0], "r")
+        fd = open(files[0], "r", encoding="utf-8", errors="surrogateescape")
         try:
             try:
                 data = fd.read()

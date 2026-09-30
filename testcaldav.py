@@ -24,6 +24,9 @@ import sys
 
 if __name__ == "__main__":
 
+    # Responses to deliberately invalid UTF-8 requests carry surrogate escapes; don't crash printing them
+    sys.stdout.reconfigure(errors="backslashreplace")
+
     manager = manager()
     manager.readCommandLine()
     result, timing = manager.runAll()

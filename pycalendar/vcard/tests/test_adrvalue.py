@@ -32,8 +32,8 @@ class TestAdrValue(unittest.TestCase):
             ("POB1", "POB1;;;;;;"),
             (";EXT", ";EXT;;;;;"),
             (";;123 Main Street,The Cards;Any Town;CA;91921-1234", ";;123 Main Street,The Cards;Any Town;CA;91921-1234;"),
-            (";;123 Main\, Street,The Cards;Any Town;CA;91921-1234", ";;123 Main\, Street,The Cards;Any Town;CA;91921-1234;"),
-            (";;123 Main\, Street,The\, Cards;Any Town;CA;91921-1234", ";;123 Main\, Street,The\, Cards;Any Town;CA;91921-1234;"),
+            (";;123 Main\\, Street,The Cards;Any Town;CA;91921-1234", ";;123 Main\\, Street,The Cards;Any Town;CA;91921-1234;"),
+            (";;123 Main\\, Street,The\\, Cards;Any Town;CA;91921-1234", ";;123 Main\\, Street,The\\, Cards;Any Town;CA;91921-1234;"),
         )
 
         for item, result in items:

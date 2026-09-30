@@ -33,11 +33,11 @@ from src.request import stats
 from src.testsuite import testsuite
 from src.xmlUtils import nodeForPath, xmlPathSplit
 from xml.etree.ElementTree import ElementTree, tostring
+import email.utils
 import subprocess
 import http.client
 import json
 import os
-import rfc822
 import socket
 import src.xmlDefs
 import sys
@@ -53,11 +53,11 @@ Patch the HTTPConnection.send to record full request details
 http.client.HTTPConnection._send = http.client.HTTPConnection.send
 
 
-def recordRequestHeaders(self, str):
+def recordRequestHeaders(self, data):
     if not hasattr(self, "requestData"):
         self.requestData = ""
-    self.requestData += str
-    http.client.HTTPConnection._send(self, str)  # @UndefinedVariable
+    self.requestData += data.decode("utf-8", "surrogateescape") if isinstance(data, bytes) else str(data)
+    http.client.HTTPConnection._send(self, data)  # @UndefinedVariable
 
 http.client.HTTPConnection.send = recordRequestHeaders
 
@@ -407,7 +407,7 @@ class caldavtest(object):
                                 if len(glm) != 1:
                                     continue
                                 value = glm[0].text
-                                value = rfc822.parsedate(value)
+                                value = email.utils.parsedate(value)
                                 value = time.mktime(value)
                                 if value > latest:
                                     possible_matches.clear()
@@ -551,9 +551,9 @@ class caldavtest(object):
             result, _ignore_resulttxt, response, _ignore_respdata = self.dorequest(req, False, False, label="%s | %s" % (label, "WAITCHANGED"))
             if result and (response is not None):
                 if response.status // 100 == 2:
-                    hdrs = response.msg.getheaders("Etag")
+                    hdrs = response.msg.get_all("Etag")
                     if hdrs:
-                        newetag = hdrs[0].encode("utf-8")
+                        newetag = hdrs[0]
                         if newetag != etag:
                             break
                 else:
@@ -723,7 +723,7 @@ class caldavtest(object):
         )
 
         if 'User-Agent' not in headers and label is not None:
-            headers['User-Agent'] = label.encode("utf-8")
+            headers['User-Agent'] = label
 
         try:
             puri = list(urllib.parse.urlparse(uri))
@@ -731,12 +731,13 @@ class caldavtest(object):
                 puri[2] = urllib.parse.quote(puri[2])
             quri = urllib.parse.urlunparse(puri)
 
-            http.request(method, quri, data, headers)
+            # Test data may deliberately contain invalid UTF-8 (see Resource/CalDAV/nonascii), so round-trip bytes via surrogateescape
+            http.request(method, quri, data.encode("utf-8", "surrogateescape") if isinstance(data, str) else data, headers)
 
             response = http.getresponse()
 
             respdata = None
-            respdata = response.read()
+            respdata = response.read().decode("utf-8", "surrogateescape")
 
         finally:
             http.close()
@@ -767,9 +768,9 @@ class caldavtest(object):
             self.manager.message("protocol", responsetxt)
 
         if etags is not None and req.method == "GET":
-            hdrs = response.msg.getheaders("Etag")
+            hdrs = response.msg.get_all("Etag")
             if hdrs:
-                etags[uri] = hdrs[0].encode("utf-8")
+                etags[uri] = hdrs[0]
 
         if req.graburi:
             self.manager.server_info.addextrasubs({req.graburi: self.grabbedlocation})
@@ -788,9 +789,9 @@ class caldavtest(object):
 
         if req.grabheader:
             for hdrname, variable in req.grabheader:
-                hdrs = response.msg.getheaders(hdrname)
+                hdrs = response.msg.get_all(hdrname)
                 if hdrs:
-                    self.manager.server_info.addextrasubs({variable: hdrs[0].encode("utf-8")})
+                    self.manager.server_info.addextrasubs({variable: hdrs[0]})
                 else:
                     result = False
                     resulttxt += "\nHeader %s was not extracted from response\n" % (hdrname,)
@@ -804,7 +805,7 @@ class caldavtest(object):
                         result = False
                         resulttxt += "\nProperty %s was not extracted from multistatus response\n" % (propname,)
                     else:
-                        self.manager.server_info.addextrasubs({variable: propvalue.encode("utf-8")})
+                        self.manager.server_info.addextrasubs({variable: propvalue})
 
         if req.grabelement:
             for item in req.grabelement:
@@ -824,7 +825,7 @@ class caldavtest(object):
                     resulttxt += "\n%d found but expecting %d for element %s from response\n" % (len(elementvalues), len(variables), elementpath,)
                 else:
                     for variable, elementvalue in zip(variables, elementvalues):
-                        self.manager.server_info.addextrasubs({variable: elementvalue.encode("utf-8") if elementvalue else ""})
+                        self.manager.server_info.addextrasubs({variable: elementvalue if elementvalue else ""})
 
         if req.grabjson:
             for pointer, variables in req.grabjson:
@@ -832,13 +833,13 @@ class caldavtest(object):
                 pointervalues = self.extractPointer(pointer, respdata)
                 if pointervalues is None:
                     result = False
-                    resulttxt += "\Pointer %s was not extracted from response\n" % (pointer,)
+                    resulttxt += "\\Pointer %s was not extracted from response\n" % (pointer,)
                 elif len(variables) != len(pointervalues):
                     result = False
                     resulttxt += "\n%d found but expecting %d for pointer %s from response\n" % (len(pointervalues), len(variables), pointer,)
                 else:
                     for variable, pointervalue in zip(variables, pointervalues):
-                        self.manager.server_info.addextrasubs({variable: pointervalue.encode("utf-8") if pointervalue else ""})
+                        self.manager.server_info.addextrasubs({variable: pointervalue if pointervalue else ""})
 
         if req.grabcalprop:
             for propname, variable in req.grabcalprop:
@@ -850,7 +851,7 @@ class caldavtest(object):
                     result = False
                     resulttxt += "\nCalendar property %s was not extracted from response\n" % (propname,)
                 else:
-                    self.manager.server_info.addextrasubs({variable: propvalue.encode("utf-8")})
+                    self.manager.server_info.addextrasubs({variable: propvalue})
 
         if req.grabcalparam:
             for paramname, variable in req.grabcalparam:
@@ -862,7 +863,7 @@ class caldavtest(object):
                     result = False
                     resulttxt += "\nCalendar Parameter %s was not extracted from response\n" % (paramname,)
                 else:
-                    self.manager.server_info.addextrasubs({variable: paramvalue.encode("utf-8")})
+                    self.manager.server_info.addextrasubs({variable: paramvalue})
 
         return result, resulttxt, response, respdata
 
@@ -920,7 +921,7 @@ class caldavtest(object):
     def parseFeatures(self, node, require=True):
         for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_FEATURE:
-                (self.require_features if require else self.exclude_features).add(child.text.encode("utf-8"))
+                (self.require_features if require else self.exclude_features).add(child.text)
 
     def extractProperty(self, propertyname, respdata):
 

@@ -80,7 +80,7 @@ class manager(object):
         print(str)
 
     def loadObserver(self, observer_name):
-        module = __import__("observers." + observer_name, globals(), locals(), ["Observer", ])
+        module = __import__("src.observers." + observer_name, globals(), locals(), ["Observer", ])
         cl = getattr(module, "Observer")
         self.observers.append(cl(self))
 
@@ -310,7 +310,9 @@ class manager(object):
 
         if all or not args:
             files = []
-            os.path.walk(dname, lambda arg, dir, names: files.extend([os.path.join(dir, name) for name in names]) if not dir.startswith("test") else None, None)
+            for dir, dirnames, filenames in os.walk(dname):
+                if not dir.startswith("test"):
+                    files.extend(os.path.join(dir, name) for name in dirnames + filenames)
             for file in files:
                 if file.endswith(".xml") and file[len(dname) + 1:] not in excludes:
                     if subdir is None or file[len(dname) + 1:].startswith(subdir):

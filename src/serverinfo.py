@@ -163,7 +163,7 @@ class serverinfo(object):
         for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_HOST:
                 try:
-                    self.host = child.text.encode("utf-8")
+                    self.host = child.text
                 except:
                     self.host = "localhost"
             elif child.tag == src.xmlDefs.ELEMENT_NONSSLPORT:
@@ -174,7 +174,7 @@ class serverinfo(object):
                 self.afunix = child.text
             elif child.tag == src.xmlDefs.ELEMENT_HOST2:
                 try:
-                    self.host2 = child.text.encode("utf-8")
+                    self.host2 = child.text
                 except:
                     self.host2 = "localhost"
             elif child.tag == src.xmlDefs.ELEMENT_NONSSLPORT2:
@@ -184,30 +184,30 @@ class serverinfo(object):
             elif child.tag == src.xmlDefs.ELEMENT_UNIX2:
                 self.afunix2 = child.text
             elif child.tag == src.xmlDefs.ELEMENT_AUTHTYPE:
-                self.authtype = child.text.encode("utf-8")
+                self.authtype = child.text
             elif child.tag == src.xmlDefs.ELEMENT_CERTDIR:
-                self.certdir = child.text.encode("utf-8")
+                self.certdir = child.text
             elif child.tag == src.xmlDefs.ELEMENT_WAITCOUNT:
-                self.waitcount = int(child.text.encode("utf-8"))
+                self.waitcount = int(child.text)
             elif child.tag == src.xmlDefs.ELEMENT_WAITDELAY:
-                self.waitdelay = float(child.text.encode("utf-8"))
+                self.waitdelay = float(child.text)
             elif child.tag == src.xmlDefs.ELEMENT_WAITSUCCESS:
-                self.waitsuccess = int(child.text.encode("utf-8"))
+                self.waitsuccess = int(child.text)
             elif child.tag == src.xmlDefs.ELEMENT_FEATURES:
                 self.parseFeatures(child)
             elif child.tag == src.xmlDefs.ELEMENT_SUBSTITUTIONS:
                 self.parseSubstitutionsXML(child)
             elif child.tag == src.xmlDefs.ELEMENT_CALENDARDATAFILTER:
-                self.calendardatafilters.append(child.text.encode("utf-8"))
+                self.calendardatafilters.append(child.text)
             elif child.tag == src.xmlDefs.ELEMENT_ADDRESSDATAFILTER:
-                self.addressdatafilters.append(child.text.encode("utf-8"))
+                self.addressdatafilters.append(child.text)
 
         self.updateParams()
 
     def parseFeatures(self, node):
         for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_FEATURE:
-                self.features.add(child.text.encode("utf-8"))
+                self.features.add(child.text)
 
     def updateParams(self):
 
@@ -247,9 +247,9 @@ class serverinfo(object):
             value = None
             for schild in node[:]:
                 if schild.tag == src.xmlDefs.ELEMENT_KEY:
-                    key = schild.text.encode("utf-8")
+                    key = schild.text
                 elif schild.tag == src.xmlDefs.ELEMENT_VALUE:
-                    value = schild.text.encode("utf-8") if schild.text else ""
+                    value = schild.text if schild.text else ""
 
             if key and value:
                 if repeat:

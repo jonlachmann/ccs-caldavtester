@@ -22,6 +22,7 @@ from os.path import dirname, abspath, join as joinpath
 from setuptools import setup, find_packages as setuptools_find_packages
 import errno
 import os
+import re
 import subprocess
 
 base_version = "0.2"
@@ -50,7 +51,7 @@ def git_info(wc_path):
     try:
         branch = subprocess.check_output(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-            stderr=subprocess.STDOUT,
+            stderr=subprocess.STDOUT, universal_newlines=True,
         )
     except OSError as e:
         if e.errno == errno.ENOENT:
@@ -64,7 +65,7 @@ def git_info(wc_path):
     try:
         revision = subprocess.check_output(
             ["git", "rev-parse", "--verify", "HEAD"],
-            stderr=subprocess.STDOUT,
+            stderr=subprocess.STDOUT, universal_newlines=True,
         )
     except OSError as e:
         if e.errno == errno.ENOENT:
@@ -78,7 +79,7 @@ def git_info(wc_path):
     try:
         tag = subprocess.check_output(
             ["git", "describe", "--candidates=0", "HEAD"],
-            stderr=subprocess.STDOUT,
+            stderr=subprocess.STDOUT, universal_newlines=True,
         )
     except OSError as e:
         if e.errno == errno.ENOENT:
@@ -140,18 +141,19 @@ def version():
         )
         # This is a release branch of this project.
         # Designate this as beta2, dev version based on git revision.
-        return "{}b2.dev-{}".format(base_version, info["revision"])
+        return "{}b2.dev0+g{}".format(base_version, info["revision"][:12])
 
     if info["branch"] == "master":
         # This is master.
         # Designate this as beta1, dev version based on git revision.
-        return "{}b1.dev-{}".format(base_version, info["revision"])
+        return "{}b1.dev0+g{}".format(base_version, info["revision"][:12])
 
     # This is some unknown branch or tag...
-    return "{}a1.dev-{}+{}".format(
+    # PEP 440 local version: alphanumerics separated by dots only
+    return "{}a1.dev0+g{}.{}".format(
         base_version,
-        info["revision"],
-        info["branch"].replace("/", ".").replace("-", "."),
+        info["revision"][:12],
+        re.sub("[^A-Za-z0-9]+", ".", info["branch"]).strip("."),
     )
 
 
@@ -163,7 +165,8 @@ project_name = "CalDAVTester"
 
 description = "CalDAV/CardDAV protocol test suite"
 
-long_description = file(joinpath(dirname(__file__), "README.md")).read()
+with open(joinpath(dirname(__file__), "README.md")) as f:
+    long_description = f.read()
 
 url = "https://github.com/apple/ccs-caldavtester"
 
@@ -172,8 +175,8 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 2.7",
-    "Programming Language :: Python :: 2 :: Only",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development :: Testing",
 ]
 
@@ -192,9 +195,7 @@ platforms = ["all"]
 
 setup_requirements = []
 
-install_requirements = [
-    "pycalendar",
-]
+install_requirements = []
 
 extras_requirements = {}
 

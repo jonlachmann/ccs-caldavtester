@@ -54,7 +54,7 @@ class Verifier(object):
 
         # read in all data from specified file or use provided data
         if len(files):
-            fd = open(files[0], "r")
+            fd = open(files[0], "r", encoding="utf-8", errors="surrogateescape")
             try:
                 try:
                     data = fd.read()

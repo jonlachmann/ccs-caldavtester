@@ -26,11 +26,11 @@ class TestRequestStatus(unittest.TestCase):
 
         items = (
             "2.0;Success",
-            "2.0;Success\;here",
+            "2.0;Success\\;here",
             "2.0;Success;Extra",
-            "2.0;Success\;here;Extra",
-            "2.0;Success;Extra\;here",
-            "2.0;Success\;here;Extra\;here too",
+            "2.0;Success\\;here;Extra",
+            "2.0;Success;Extra\\;here",
+            "2.0;Success\\;here;Extra\\;here too",
         )
 
         for item in items:
@@ -40,7 +40,7 @@ class TestRequestStatus(unittest.TestCase):
 
     def testBadValue(self):
 
-        bad_value = "2.0\;Success"
+        bad_value = "2.0\\;Success"
         ok_value = "2.0;Success"
 
         # Fix the value
@@ -80,11 +80,11 @@ class TestRequestStatus(unittest.TestCase):
 
         items = (
             "REQUEST-STATUS:2.0;Success",
-            "REQUEST-STATUS:2.0;Success\;here",
+            "REQUEST-STATUS:2.0;Success\\;here",
             "REQUEST-STATUS:2.0;Success;Extra",
-            "REQUEST-STATUS:2.0;Success\;here;Extra",
-            "REQUEST-STATUS:2.0;Success;Extra\;here",
-            "REQUEST-STATUS:2.0;Success\;here;Extra\;here too",
+            "REQUEST-STATUS:2.0;Success\\;here;Extra",
+            "REQUEST-STATUS:2.0;Success;Extra\\;here",
+            "REQUEST-STATUS:2.0;Success\\;here;Extra\\;here too",
         )
 
         for item in items:

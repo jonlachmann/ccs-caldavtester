@@ -46,7 +46,7 @@ class TestProperty(unittest.TestCase):
         "TZOFFSETFROM:-0500",
         "TZOFFSETFROM:-045857",
         "X-FOO;VALUE=FLOAT:-1.23",
-        "X-Test:Some\, text.",
+        "X-Test:Some\\, text.",
         "X-Test:Some:, text.",
         "X-APPLE-STRUCTURED-LOCATION;VALUE=URI:geo:123.123,123.123",
         "X-CALENDARSERVER-PRIVATE-COMMENT:This\\ntest\\nis\\, here.\\n",

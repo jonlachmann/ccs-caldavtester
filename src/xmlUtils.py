@@ -26,7 +26,7 @@ def readStringElementList(node, ename):
     results = []
     for child in node[:]:
         if child.tag == ename:
-            results.append(child.text.decode("utf-8"))
+            results.append(child.text)
     return results
 
 
@@ -46,7 +46,7 @@ def readOneStringElement(node, ename):
 
     for child in node[:]:
         if child.tag == ename:
-            return child.text.decode("utf-8")
+            return child.text
     return ""
 
 

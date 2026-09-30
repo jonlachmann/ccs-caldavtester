@@ -71,7 +71,7 @@ class test(object):
     def parseFeatures(self, node, require=True):
         for child in node[:]:
             if child.tag == src.xmlDefs.ELEMENT_FEATURE:
-                (self.require_features if require else self.exclude_features).add(child.text.encode("utf-8"))
+                (self.require_features if require else self.exclude_features).add(child.text)
 
     def dump(self):
         print("\nTEST: %s" % self.name)

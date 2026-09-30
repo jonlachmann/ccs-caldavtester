@@ -257,7 +257,7 @@ ATTACH:http://example.com/test.jpg
 DTSTAMP:20020101T000000Z
 SUMMARY:New Year's Day
 X-APPLE-STRUCTURED-LOCATION:geo:123.123,123.123
-X-Test:Some\, text.
+X-Test:Some\\, text.
 END:VEVENT
 END:VCALENDAR
 """.replace("\n", "\r\n"),
@@ -274,7 +274,7 @@ ATTACH:http://example.com/test.jpg
 DTSTAMP:20020101T000000Z
 SUMMARY:New Year's Day
 X-APPLE-STRUCTURED-LOCATION;VALUE=URI:geo:123.123,123.123
-X-Test:Some\, text.
+X-Test:Some\\, text.
 END:VEVENT
 END:VCALENDAR
 """.replace("\n", "\r\n"),
