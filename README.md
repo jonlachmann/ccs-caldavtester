@@ -103,6 +103,12 @@ CalDAVTester is run via the `testcaldav.py` script:
 
 Edit the serverinfo.xml file to run the test against your server setup.
 
+The default serverinfo.xml enables Apple CalendarServer's extensions. For
+any other server, start from scripts/server/serverinfo-standard.xml instead:
+it enables only RFC-defined features (each annotated with its RFC), and lists
+server policies and Apple extensions separately, disabled, so tests that need
+them report IGNORED rather than FAILED. Select it with `-s`.
+
 Prior to running, make sure you are in the virtualenv:
 
 	source venv/bin/activate
