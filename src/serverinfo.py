@@ -22,7 +22,7 @@ import datetime
 import re
 import src.xmlDefs
 from uuid import uuid4
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 
 class serverinfo(object):
@@ -120,7 +120,7 @@ class serverinfo(object):
             db_actual = self.subsdict
         else:
             db_actual = db
-        for key, value in items.iteritems():
+        for key, value in items.items():
             db_actual[key] = value
 
         if db is None:
@@ -137,7 +137,7 @@ class serverinfo(object):
 
         # Various "functions" might be applied to a variable name to cause the value to
         # be changed in various ways
-        for variable, value in items.items():
+        for variable, value in list(items.items()):
 
             # basename() - extract just the URL last path segment from the value
             if variable.startswith("basename("):
@@ -157,7 +157,7 @@ class serverinfo(object):
         uidsubs = dict([("$uid{u}:".format(u=i), str(uuid4())) for i in range(1, 21)])
         self.subsdict.update(uidsubs)
         self.extrasubsdict.update(uidsubs)
-        return set([(v, k) for k, v in uidsubs.items()])
+        return set([(v, k) for k, v in list(uidsubs.items())])
 
     def parseXML(self, node):
         for child in node.getchildren():
@@ -212,7 +212,7 @@ class serverinfo(object):
     def updateParams(self):
 
         # Expand substitutions fully at this point
-        for k, v in self.subsdict.items():
+        for k, v in list(self.subsdict.items()):
             while '$' in v:
                 v = self._re_subs(v, self.subsdict)
             self.subsdict[k] = v

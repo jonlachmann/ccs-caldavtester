@@ -14,7 +14,7 @@
 #    limitations under the License.
 ##
 
-from cStringIO import StringIO
+from io import StringIO
 from pycalendar import xmlutils
 from pycalendar.containerbase import ContainerBase
 from pycalendar.datetime import DateTime
@@ -533,9 +533,9 @@ class Calendar(ContainerBase):
         # Create non-overlapping periods as properties in the freebusy component
         temp = Period(dtstart.front(), dtend.front())
         dtstart_iter = dtstart.iter()
-        dtstart_iter.next()
+        next(dtstart_iter)
         dtend_iter = dtend.iter()
-        dtend_iter.next()
+        next(dtend_iter)
         for _ignore in (None,):
 
             # Check for non-overlap

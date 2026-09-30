@@ -20,7 +20,7 @@ from pycalendar.icalendar import definitions, xmldefinitions
 from pycalendar.icalendar.exceptions import TooManyInstancesError
 from pycalendar.period import Period
 from pycalendar.valueutils import ValueMixin
-import cStringIO as StringIO
+import io as StringIO
 import xml.etree.cElementTree as XML
 
 
@@ -92,7 +92,7 @@ class Recurrence(ValueMixin):
         definitions.cICalValue_RECUR_WEEKDAY_SA: definitions.eRecurrence_WEEKDAY_SA,
     }
 
-    cWeekdayRecurMap = dict([(v, k) for k, v in cWeekdayMap.items()])
+    cWeekdayRecurMap = dict([(v, k) for k, v in list(cWeekdayMap.items())])
 
     cUnknownIndex = -1
 
@@ -690,13 +690,13 @@ class Recurrence(ValueMixin):
         """
 
         items = []
-        for name, value in jobject.items():
+        for name, value in list(jobject.items()):
             if name in (
                 "bysecond", "byminute", "byhour",
                 "bymonthday", "byyearday", "byweekno",
                 "bymonth", "bysetpos", "byday",
             ):
-                if not isinstance(value, str) and not isinstance(value, unicode) and not isinstance(value, int):
+                if not isinstance(value, str) and not isinstance(value, str) and not isinstance(value, int):
                     value = ",".join(map(str, value))
             elif name == "until":
                 value = value.replace("-", "").replace(":", "")
@@ -1090,7 +1090,7 @@ class Recurrence(ValueMixin):
             items[:] = self.bySecondExpand(items)
 
         # Remove invalid items before BYSETPOS
-        items[:] = filter(lambda x: not x.invalid(), items)
+        items[:] = [x for x in items if not x.invalid()]
 
         if (self.mBySetPos is not None) and (len(self.mBySetPos) != 0):
             items[:] = self.bySetPosLimit(items)
@@ -1137,7 +1137,7 @@ class Recurrence(ValueMixin):
             items[:] = self.bySecondExpand(items)
 
         # Remove invalid items before BYSETPOS
-        items[:] = filter(lambda x: not x.invalid(), items)
+        items[:] = [x for x in items if not x.invalid()]
 
         if ((self.mBySetPos is not None) and (len(self.mBySetPos) != 0)):
             items[:] = self.bySetPosLimit(items)
@@ -1176,7 +1176,7 @@ class Recurrence(ValueMixin):
             items[:] = self.bySecondExpand(items)
 
         # Remove invalid items before BYSETPOS
-        items[:] = filter(lambda x: not x.invalid(), items)
+        items[:] = [x for x in items if not x.invalid()]
 
         if (self.mBySetPos is not None) and (len(self.mBySetPos) != 0):
             items[:] = self.bySetPosLimit(items)
@@ -1220,7 +1220,7 @@ class Recurrence(ValueMixin):
             items[:] = self.bySecondExpand(items)
 
         # Remove invalid items before BYSETPOS
-        items[:] = filter(lambda x: not x.invalid(), items)
+        items[:] = [x for x in items if not x.invalid()]
 
         if (self.mBySetPos is not None) and (len(self.mBySetPos) != 0):
             items[:] = self.bySetPosLimit(items)
@@ -1266,7 +1266,7 @@ class Recurrence(ValueMixin):
             items[:] = self.bySecondExpand(items)
 
         # Remove invalid items before BYSETPOS
-        items[:] = filter(lambda x: not x.invalid(), items)
+        items[:] = [x for x in items if not x.invalid()]
 
         if (self.mBySetPos is not None) and (len(self.mBySetPos) != 0):
             items[:] = self.bySetPosLimit(items)
@@ -1314,7 +1314,7 @@ class Recurrence(ValueMixin):
             items[:] = self.bySecondExpand(items)
 
         # Remove invalid items before BYSETPOS
-        items[:] = filter(lambda x: not x.invalid(), items)
+        items[:] = [x for x in items if not x.invalid()]
 
         if (self.mBySetPos is not None) and (len(self.mBySetPos) != 0):
             items[:] = self.bySetPosLimit(items)
@@ -1364,7 +1364,7 @@ class Recurrence(ValueMixin):
                 return
 
         # Remove invalid items before BYSETPOS
-        items[:] = filter(lambda x: not x.invalid(), items)
+        items[:] = [x for x in items if not x.invalid()]
 
         if (self.mBySetPos is not None) and (len(self.mBySetPos) != 0):
             items[:] = self.bySetPosLimit(items)

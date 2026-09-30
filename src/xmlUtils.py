@@ -86,7 +86,7 @@ def nodeForPath(root, path):
                     else:
                         attr = test[1:]
                         value = None
-                    if attr in node.keys() and (value is None or node.get(attr) == value):
+                    if attr in list(node.keys()) and (value is None or node.get(attr) == value):
                         results.append(node)
                 elif test[0] == '=':
                     if node.text == test[1:]:

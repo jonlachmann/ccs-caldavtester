@@ -14,7 +14,7 @@
 #    limitations under the License.
 ##
 
-from cStringIO import StringIO
+from io import StringIO
 from pycalendar import xmldefinitions, xmlutils
 from pycalendar.datetimevalue import DateTimeValue
 from pycalendar.periodvalue import PeriodValue
@@ -59,7 +59,7 @@ class ComponentBase(object):
             other.addComponent(component.duplicate(parent=other))
 
         other.mProperties = {}
-        for propname, props in self.mProperties.iteritems():
+        for propname, props in self.mProperties.items():
             other.mProperties[propname] = [i.duplicate() for i in props]
         return other
 
@@ -149,10 +149,10 @@ class ComponentBase(object):
 
     def compareProperties(self, other):
         mine = set()
-        for props in self.mProperties.values():
+        for props in list(self.mProperties.values()):
             mine.update(props)
         theirs = set()
-        for props in other.mProperties.values():
+        for props in list(other.mProperties.values()):
             theirs.update(props)
         return mine == theirs
 
@@ -213,7 +213,7 @@ class ComponentBase(object):
 
         # Value constraints - these tests come from class specific attributes
         if self.propertyValueChecks is not None:
-            for properties in self.mProperties.values():
+            for properties in list(self.mProperties.values()):
                 for property in properties:
                     propname = property.getName().upper()
                     if propname in self.propertyValueChecks:
@@ -547,7 +547,7 @@ class ComponentBase(object):
             return False
 
     def sortedPropertyKeys(self):
-        keys = self.mProperties.keys()
+        keys = list(self.mProperties.keys())
         keys.sort()
 
         results = []

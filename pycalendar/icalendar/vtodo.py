@@ -21,7 +21,7 @@ from pycalendar.icalendar.component import Component
 from pycalendar.icalendar.componentrecur import ComponentRecur
 from pycalendar.icalendar.property import Property
 from pycalendar.icalendar.validation import ICALENDAR_VALUE_CHECKS
-import cStringIO as StringIO
+import io as StringIO
 
 
 class VToDo(ComponentRecur):

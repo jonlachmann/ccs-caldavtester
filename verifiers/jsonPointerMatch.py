@@ -57,7 +57,7 @@ class Verifier(object):
         # Read in json
         try:
             j = json.loads(respdata)
-        except Exception, e:
+        except Exception as e:
             return False, "        Response data is not JSON data: %s" % (e,)
 
         def _splitPathTests(path):
@@ -86,7 +86,7 @@ class Verifier(object):
                     if not jobjs:
                         result = False
                         resulttxt += "        Items not returned in JSON for %s\n" % (path,)
-                    if value and value not in map(lambda x: self.null if x is None else str(x), jobjs):
+                    if value and value not in [self.null if x is None else str(x) for x in jobjs]:
                         result = False
                         resulttxt += "        Item values not returned in JSON for %s\n" % (jpath,)
                 except JSONPointerMatchError:

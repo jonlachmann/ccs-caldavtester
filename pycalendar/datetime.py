@@ -21,7 +21,7 @@ from pycalendar.icalendar import definitions
 from pycalendar.parser import ParserContext
 from pycalendar.timezone import Timezone
 from pycalendar.valueutils import ValueMixin
-import cStringIO as StringIO
+import io as StringIO
 import time
 import xml.etree.cElementTree as XML
 
@@ -226,13 +226,13 @@ class DateTime(ValueMixin):
         # Look for cached value (or floating time which has to be calculated
         # each time)
         if (not self.mPosixTimeCached) or self.floating():
-            result = 0L
+            result = 0
 
             # Add hour/mins/secs
-            result = (self.mHours * 60L + self.mMinutes) * 60L + self.mSeconds
+            result = (self.mHours * 60 + self.mMinutes) * 60 + self.mSeconds
 
             # Number of days since 1970
-            result += self.daysSince1970() * 24L * 60L * 60L
+            result += self.daysSince1970() * 24 * 60 * 60
 
             # Adjust for timezone offset
             result -= self.timeZoneSecondsOffset()

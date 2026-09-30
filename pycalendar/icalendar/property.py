@@ -196,7 +196,7 @@ class Property(PropertyBase):
         elif isinstance(value, str):
             self._init_attr_value_text(value, valuetype if valuetype else self.sDefaultValueTypeMap.get(self.mName.upper(), Value.VALUETYPE_UNKNOWN))
 
-        elif isinstance(value, unicode):
+        elif isinstance(value, str):
             value = value.encode("utf-8")
             self._init_attr_value_text(value, valuetype if valuetype else self.sDefaultValueTypeMap.get(self.mName.upper(), Value.VALUETYPE_UNKNOWN))
 
@@ -232,7 +232,7 @@ class Property(PropertyBase):
 
     def duplicate(self):
         other = Property(self.mName)
-        for attrname, attrs in self.mParameters.items():
+        for attrname, attrs in list(self.mParameters.items()):
             other.mParameters[attrname] = [i.duplicate() for i in attrs]
         other.mValue = self.mValue.duplicate()
 

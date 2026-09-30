@@ -18,7 +18,7 @@
 Class to encapsulate a single caldav test run.
 """
 
-from cStringIO import StringIO
+from io import StringIO
 try:
     # Treat pycalendar as optional
     from pycalendar.icalendar.calendar import Calendar
@@ -33,8 +33,8 @@ from src.request import stats
 from src.testsuite import testsuite
 from src.xmlUtils import nodeForPath, xmlPathSplit
 from xml.etree.cElementTree import ElementTree, tostring
-import commands
-import httplib
+import subprocess
+import http.client
 import json
 import os
 import rfc822
@@ -43,23 +43,23 @@ import src.xmlDefs
 import sys
 import time
 import traceback
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 
 """
 Patch the HTTPConnection.send to record full request details
 """
 
-httplib.HTTPConnection._send = httplib.HTTPConnection.send
+http.client.HTTPConnection._send = http.client.HTTPConnection.send
 
 
 def recordRequestHeaders(self, str):
     if not hasattr(self, "requestData"):
         self.requestData = ""
     self.requestData += str
-    httplib.HTTPConnection._send(self, str)  # @UndefinedVariable
+    http.client.HTTPConnection._send(self, str)  # @UndefinedVariable
 
-httplib.HTTPConnection.send = recordRequestHeaders
+http.client.HTTPConnection.send = recordRequestHeaders
 
 
 def getVersionStringFromResponse(response):
@@ -122,10 +122,10 @@ class caldavtest(object):
             self.doenddelete("Deleting Requests...", label="%s | %s" % (self.name, "END_DELETE"))
             self.dorequests("End Requests...", self.end_requests, False, label="%s | %s" % (self.name, "END_REQUESTS"))
             return ok, failed, ignored
-        except socket.error, msg:
+        except socket.error as msg:
             self.manager.testFile(self.name, "SOCKET ERROR: %s" % (msg,), manager.RESULT_ERROR)
             return 0, 1, 0
-        except Exception, e:
+        except Exception as e:
             self.manager.testFile(self.name, "FATAL ERROR: %s" % (e,), manager.RESULT_ERROR)
             if self.manager.debug:
                 traceback.print_exc()
@@ -590,7 +590,7 @@ class caldavtest(object):
 
         if isinstance(req, pause):
             # Useful for pausing at a particular point
-            print "Paused"
+            print("Paused")
             sys.stdin.readline()
             return True, "", None, None
 
@@ -726,10 +726,10 @@ class caldavtest(object):
             headers['User-Agent'] = label.encode("utf-8")
 
         try:
-            puri = list(urlparse.urlparse(uri))
+            puri = list(urllib.parse.urlparse(uri))
             if req.ruri_quote:
-                puri[2] = urllib.quote(puri[2])
-            quri = urlparse.urlunparse(puri)
+                puri[2] = urllib.parse.quote(puri[2])
+            quri = urllib.parse.urlunparse(puri)
 
             http.request(method, quri, data, headers)
 
@@ -1118,7 +1118,7 @@ class caldavtest(object):
         """
         if self.manager.postgresLog:
             if os.path.exists(self.manager.postgresLog):
-                return int(commands.getoutput("grep \"LOG:  statement:\" %s | wc -l" % (self.manager.postgresLog,)))
+                return int(subprocess.getoutput("grep \"LOG:  statement:\" %s | wc -l" % (self.manager.postgresLog,)))
 
         return 0
 
@@ -1126,7 +1126,7 @@ class caldavtest(object):
 
         if self.manager.postgresLog:
             if os.path.exists(self.manager.postgresLog):
-                newCount = int(commands.getoutput("grep \"LOG:  statement:\" %s | wc -l" % (self.manager.postgresLog,)))
+                newCount = int(subprocess.getoutput("grep \"LOG:  statement:\" %s | wc -l" % (self.manager.postgresLog,)))
             else:
                 newCount = 0
             self.manager.message("trace", "Postgres Statements: %d" % (newCount - startCount,))

@@ -30,7 +30,7 @@ from pycalendar.urivalue import URIValue
 from pycalendar.utcoffsetvalue import UTCOffsetValue
 from pycalendar.utils import decodeParameterValue
 from pycalendar.value import Value
-import cStringIO as StringIO
+import io as StringIO
 import xml.etree.cElementTree as XML
 
 
@@ -123,7 +123,7 @@ class PropertyBase(object):
         return self.mParameters
 
     def setParameters(self, parameters):
-        self.mParameters = dict([(k.upper(), v) for k, v in parameters.iteritems()])
+        self.mParameters = dict([(k.upper(), v) for k, v in parameters.items()])
 
     def hasParameter(self, attr):
         return attr.upper() in self.mParameters
@@ -437,7 +437,7 @@ class PropertyBase(object):
 
             # Get the parameters
             if jobject[1]:
-                for name, value in jobject[1].items():
+                for name, value in list(jobject[1].items()):
                     # Now add parameter value
                     name = name.upper()
                     attrvalue = Parameter(name=name.encode("utf-8"), value=value.encode("utf-8"))

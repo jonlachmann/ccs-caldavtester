@@ -179,7 +179,7 @@ class Component(ComponentBase):
 
     def getTimezones(self, tzids):
         # Look for all date-time properties
-        for props in self.mProperties.itervalues():
+        for props in self.mProperties.values():
             for prop in props:
                 # Try to get a date-time value from the property
                 dtv = prop.getDateTimeValue()

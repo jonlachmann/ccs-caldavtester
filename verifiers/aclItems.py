@@ -20,8 +20,8 @@ are available for the currently authenticated user.
 """
 
 from xml.etree.cElementTree import ElementTree
-from StringIO import StringIO
-import urllib
+from io import StringIO
+import urllib.request, urllib.parse, urllib.error
 
 
 class Verifier(object):
@@ -51,7 +51,7 @@ class Verifier(object):
             href = response.findall("{DAV:}href")
             if len(href) != 1:
                 return False, "           Wrong number of DAV:href elements\n"
-            href = urllib.unquote(href[0].text)
+            href = urllib.parse.unquote(href[0].text)
 
             # Get all privileges
             granted_privs = []

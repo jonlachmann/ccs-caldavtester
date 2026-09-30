@@ -29,7 +29,7 @@ from pycalendar.vcard.adrvalue import AdrValue
 from pycalendar.vcard.n import N
 from pycalendar.vcard.nvalue import NValue
 from pycalendar.vcard.orgvalue import OrgValue
-import cStringIO as StringIO
+import io as StringIO
 
 handleOptions = ("allow", "ignore", "fix", "raise")
 missingParameterValues = "fix"
@@ -179,7 +179,7 @@ class Property(PropertyBase):
 
     def duplicate(self):
         other = Property(self.mGroup, self.mName)
-        for attrname, attrs in self.mParameters.items():
+        for attrname, attrs in list(self.mParameters.items()):
             other.mParameters[attrname] = [i.duplicate() for i in attrs]
         other.mValue = self.mValue.duplicate()
 

@@ -16,7 +16,7 @@
 
 # iCalendar UTC Offset value
 
-from cStringIO import StringIO
+from io import StringIO
 from pycalendar import xmldefinitions
 from pycalendar.value import Value
 

@@ -193,7 +193,7 @@ class TestRecurrence(unittest.TestCase):
             recur.parse(i["rule"])
             start = DateTime.parseText(i["start"])
             end = DateTime.parseText(i["end"])
-            results = map(DateTime.parseText, i["results"])
+            results = list(map(DateTime.parseText, i["results"]))
 
             items = []
             range = Period(start, end)

@@ -34,7 +34,7 @@ class Adr(ValueMixin):
         POSTALCODE,
         COUNTRY,
         MAXITEMS
-    ) = range(8)
+    ) = list(range(8))
 
     def __init__(self, pobox="", extended="", street="", locality="", region="", postalcode="", country=""):
         self.mValue = (pobox, extended, street, locality, region, postalcode, country)
@@ -100,7 +100,7 @@ class Adr(ValueMixin):
         utils.generateDoubleNestedList(os, self.mValue)
 
     def parseJSON(self, jobject):
-        self.mValue = tuple(map(lambda x: x.encode("utf-8"), jobject))
+        self.mValue = tuple([x.encode("utf-8") for x in jobject])
 
     def writeJSON(self, jobject):
         jobject.append(list(self.mValue))

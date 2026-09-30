@@ -27,8 +27,8 @@ import os
 import re
 import src.xmlDefs
 import time
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import uuid
 
 algorithms = {
@@ -197,7 +197,7 @@ class request(object):
 
     def getHeaders(self, si):
         hdrs = self.headers
-        for key, value in hdrs.items():
+        for key, value in list(hdrs.items()):
             hdrs[key] = si.extrasubs(value)
 
         # Content type
@@ -233,9 +233,9 @@ class request(object):
             # Redo digest auth from scratch to get a new nonce etc
             http = SmartHTTPConnection(si.host, si.port, si.ssl, si.afunix)
             try:
-                puri = list(urlparse.urlparse(self.getURI(si)))
-                puri[2] = urllib.quote(puri[2])
-                quri = urlparse.urlunparse(puri)
+                puri = list(urllib.parse.urlparse(self.getURI(si)))
+                puri[2] = urllib.parse.quote(puri[2])
+                quri = urllib.parse.urlunparse(puri)
                 http.request("OPTIONS", quri)
 
                 response = http.getresponse()
@@ -537,7 +537,7 @@ class generator(object):
 
         # Re-do substitutions from values generated during the current test run
         if self.manager.server_info.hasextrasubs():
-            for name, values in self.args.iteritems():
+            for name, values in self.args.items():
                 newvalues = [self.manager.server_info.extrasubs(value) for value in values]
                 self.args[name] = newvalues
 
@@ -545,7 +545,7 @@ class generator(object):
         gen = generatorClass()
 
         # Always clone the args as this verifier may be called multiple times
-        args = dict((k, list(v)) for k, v in self.args.items())
+        args = dict((k, list(v)) for k, v in list(self.args.items()))
 
         return gen.generate(self.manager, args)
 
@@ -604,7 +604,7 @@ class verify(object):
 
         # Re-do substitutions from values generated during the current test run
         if self.manager.server_info.hasextrasubs():
-            for name, values in self.args.iteritems():
+            for name, values in self.args.items():
                 newvalues = [self.manager.server_info.extrasubs(value) for value in values]
                 self.args[name] = newvalues
 
@@ -612,7 +612,7 @@ class verify(object):
         verifier = verifierClass()
 
         # Always clone the args as this verifier may be called multiple times
-        args = dict((k, list(v)) for k, v in self.args.items())
+        args = dict((k, list(v)) for k, v in list(self.args.items()))
 
         return verifier.verify(self.manager, uri, response, respdata, args)
 

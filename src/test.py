@@ -74,7 +74,7 @@ class test(object):
                 (self.require_features if require else self.exclude_features).add(child.text.encode("utf-8"))
 
     def dump(self):
-        print "\nTEST: %s" % self.name
-        print "    description: %s" % self.description
+        print("\nTEST: %s" % self.name)
+        print("    description: %s" % self.description)
         for req in self.requests:
             req.dump()

@@ -14,7 +14,7 @@
 # limitations under the License.
 ##
 
-import httplib
+import http.client
 import socket
 import ssl as sslmodule
 
@@ -32,14 +32,14 @@ if len(cached_types) == 0:
     raise RuntimeError("Unable to find suitable SSL protocol to use")
 
 
-class HTTPSVersionConnection(httplib.HTTPSConnection):
+class HTTPSVersionConnection(http.client.HTTPSConnection):
     """
     An L{httplib.HTTPSConnection} class that allows the TLS protocol version to be set.
     """
 
     def __init__(self, host, port, ssl_version=cached_types[0][1], cert_file=None):
 
-        httplib.HTTPSConnection.__init__(self, host, port, cert_file=cert_file)
+        http.client.HTTPSConnection.__init__(self, host, port, cert_file=cert_file)
         self._ssl_version = ssl_version
 
     def connect(self):
@@ -49,13 +49,13 @@ class HTTPSVersionConnection(httplib.HTTPSConnection):
         self.sock = sslmodule.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=self._ssl_version)
 
 
-class UnixSocketHTTPConnection(httplib.HTTPConnection):
+class UnixSocketHTTPConnection(http.client.HTTPConnection):
     """
     An L{httplib.HTTPConnection} class that uses a unix socket rather than TCP.
     """
 
     def __init__(self, path, host, port):
-        httplib.HTTPConnection.__init__(self, host, port)
+        http.client.HTTPConnection.__init__(self, host, port)
         self.path = path
 
     def connect(self):
@@ -110,6 +110,6 @@ def SmartHTTPConnection(host, port, ssl, afunix, cert=None):
 
         raise RuntimeError("Cannot connect via with TLSv1, SSLv3 or SSLv23")
     else:
-        connect = httplib.HTTPConnection(host, port)
+        connect = http.client.HTTPConnection(host, port)
     connect.connect()
     return connect

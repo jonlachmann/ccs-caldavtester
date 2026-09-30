@@ -16,7 +16,7 @@
 
 # Helpers for value classes
 
-from cStringIO import StringIO
+from io import StringIO
 
 
 class ValueMixin(object):

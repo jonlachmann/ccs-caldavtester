@@ -75,7 +75,7 @@ class testsuite(object):
                 (self.require_features if require else self.exclude_features).add(child.text.encode("utf-8"))
 
     def dump(self):
-        print "\nTest Suite:"
-        print "    name: %s" % self.name
+        print("\nTest Suite:")
+        print("    name: %s" % self.name)
         for iter in self.tests:
             iter.dump()

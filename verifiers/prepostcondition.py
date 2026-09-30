@@ -19,7 +19,7 @@ Verifier that checks the response for a pre/post-condition <DAV:error> result.
 """
 
 from xml.etree.cElementTree import ElementTree
-from StringIO import StringIO
+from io import StringIO
 
 
 class Verifier(object):
@@ -40,7 +40,7 @@ class Verifier(object):
 
         try:
             tree = ElementTree(file=StringIO(respdata))
-        except Exception, ex:
+        except Exception as ex:
             return False, "        Could not parse XML: %s" % (ex,)
 
         if tree.getroot().tag != "{DAV:}error":

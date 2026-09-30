@@ -27,7 +27,7 @@ except ImportError:
 from xml.etree.cElementTree import ElementTree
 import json
 import re
-import StringIO
+import io
 
 
 class Verifier(object):
@@ -48,8 +48,8 @@ class Verifier(object):
 
         # Read in XML
         try:
-            tree = ElementTree(file=StringIO.StringIO(respdata))
-        except Exception, e:
+            tree = ElementTree(file=io.StringIO(respdata))
+        except Exception as e:
             return False, "        Response data is not xml data: %s" % (e,)
 
         def _splitPathTests(path):
@@ -133,7 +133,7 @@ class Verifier(object):
             else:
                 attr = test[1:]
                 value = None
-            if attr not in node.keys():
+            if attr not in list(node.keys()):
                 result = "        Missing attribute returned in XML for %s\n" % (node_path,)
             if value is not None and node.get(attr) != value:
                 result = "        Incorrect attribute value returned in XML for %s\n" % (node_path,)
@@ -273,7 +273,7 @@ if __name__ == '__main__':
 </D:test>
 """
 
-    node = ElementTree(file=StringIO.StringIO(xmldata)).getroot()
+    node = ElementTree(file=io.StringIO(xmldata)).getroot()
 
     assert Verifier.matchNode(node, "/{DAV:}test/{DAV:}b/{DAV:}c[=C]/../{DAV:}d[=D]")[0]
     assert not Verifier.matchNode(node, "/{DAV:}test/{DAV:}b/{DAV:}c[=C]/../{DAV:}d[=E]")[0]

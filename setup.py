@@ -16,7 +16,7 @@
 # limitations under the License.
 ##
 
-from __future__ import print_function
+
 
 from os.path import dirname, abspath, join as joinpath
 from setuptools import setup, find_packages as setuptools_find_packages
@@ -35,10 +35,7 @@ base_project = "ccs-caldavtester"
 def find_packages():
     modules = []
 
-    for pkg in filter(
-        lambda p: os.path.isdir(p) and os.path.isfile(os.path.join(p, "__init__.py")),
-        os.listdir(".")
-    ):
+    for pkg in [p for p in os.listdir(".") if os.path.isdir(p) and os.path.isfile(os.path.join(p, "__init__.py"))]:
         modules.extend([pkg, ] + [
             "{}.{}".format(pkg, subpkg)
             for subpkg in setuptools_find_packages(pkg)

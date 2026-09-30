@@ -31,7 +31,7 @@ class Parameter(object):
         self.mName = name
         if value is None:
             self.mValues = []
-        elif isinstance(value, basestring):
+        elif isinstance(value, str):
             self.mValues = [value]
         else:
             self.mValues = value

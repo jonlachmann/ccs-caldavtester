@@ -37,13 +37,13 @@ def validate(fname):
         try:
             cal = Calendar.parseText(data)
         except ErrorBase as e:
-            print("Failed to parse iCalendar: {}: {}".format(e.mReason, e.mData,))
+            print(("Failed to parse iCalendar: {}: {}".format(e.mReason, e.mData,)))
             sys.exit(1)
     elif data.find("BEGIN:VCARD") != -1:
         try:
             cal = Card.parseText(data)
         except ErrorBase as e:
-            print("Failed to parse vCard: {}: {}".format(e.mReason, e.mData,))
+            print(("Failed to parse vCard: {}: {}".format(e.mReason, e.mData,)))
             sys.exit(1)
     else:
         print("Failed to find valid iCalendar or vCard data")
@@ -51,7 +51,7 @@ def validate(fname):
 
     _ignore_fixed, unfixed = cal.validate(doFix=False, doRaise=False)
     if unfixed:
-        print("List of problems: {}".format(unfixed,))
+        print(("List of problems: {}".format(unfixed,)))
     else:
         print("No problems")
 
@@ -60,7 +60,7 @@ def validate(fname):
     if len(s.translate(None, "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F")) != len(s):
         for ctr, i in enumerate(data):
             if i in "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x0B\x0C\x0E\x0F\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F":
-                print("Control character {} at position {}".format(ord(i), ctr,))
+                print(("Control character {} at position {}".format(ord(i), ctr,)))
 
 
 if __name__ == '__main__':

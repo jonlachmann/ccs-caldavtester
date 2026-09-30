@@ -14,7 +14,7 @@
 #    limitations under the License.
 ##
 
-from cStringIO import StringIO
+from io import StringIO
 from pycalendar.containerbase import ContainerBase
 from pycalendar.exceptions import InvalidData
 from pycalendar.parser import ParserContext

@@ -15,7 +15,7 @@
 #    limitations under the License.
 ##
 
-from __future__ import print_function
+
 from pycalendar.datetime import DateTime
 from pycalendar.icalendar.recurrence import Recurrence
 from pycalendar.period import Period

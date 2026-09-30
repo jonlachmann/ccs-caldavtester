@@ -15,7 +15,7 @@
 ##
 
 from pycalendar.parser import ParserContext
-import cStringIO as StringIO
+import io as StringIO
 
 
 def readFoldedLine(ins, lines):
@@ -285,7 +285,7 @@ def generateTextList(os, data, sep=';'):
     Each element of the list must be separately escaped
     """
     try:
-        if isinstance(data, basestring):
+        if isinstance(data, str):
             data = (data,)
         results = [escapeTextValue(value) for value in data]
         os.write(sep.join(results))
@@ -337,7 +337,7 @@ def parseDoubleNestedList(data, maxsize):
 def generateDoubleNestedList(os, data):
     try:
         def _writeElement(item):
-            if isinstance(item, basestring):
+            if isinstance(item, str):
                 writeTextValue(os, item)
             else:
                 if item:
