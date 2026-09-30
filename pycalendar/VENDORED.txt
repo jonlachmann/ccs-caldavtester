@@ -1,0 +1,2 @@
+Vendored from https://github.com/apple/ccs-pycalendar at a12dd4e1ce8822b022d4abf2cfe6cc93902ff03f (archived upstream).
+Ported to Python 3 in this repo.
